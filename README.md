@@ -12,13 +12,24 @@ All tests are runnable locally using the Playwright Test runner.
 
 ## 📘 Learning Focus (Udemy End-to-End Playwright tutorials on JavaScript & TypeScript. UI Testing, API testing, Page Objects, Cucumber, CI/CD, etc.)
 While building this repository, I am actively learning:
-- Introduction to Playwright and its features: multiple browsers, headless vs headed, auto-waiting, screenshots  
-- Async/await patterns and test function annotations  
-- Browser context and page fixtures for isolated sessions  
-- Playwright configuration: `testDir`, `use` settings, retries, timeouts  
-- Assertions with `expect()` and cross-browser testing  
-- Locators for single and multiple elements, typing, clicking, and extracting text  
-- Dynamic waits for slow-loading pages and new page events  
+This repository tracks my progress in mastering Playwright for modern web automation, focusing on real-world skills relevant to React/JavaScript applications.
+
+Key Areas of Learning:
+✅ Handling dropdowns, radio buttons, checkboxes, and assertions
+✅ Managing child windows, tabs, and frames
+✅ Debugging with Inspector & Codegen tools
+✅ Using traces, reports, logs, and screenshots for test results
+✅ End-to-end test flows: dynamic product selection, order placement, order history validation
+✅ Advanced locator strategies: getByRole, getByText, getByLabel, chaining
+✅ Calendar handling and hidden element validation
+✅ API + UI hybrid testing (Playwright request methods, token injection, intercepting requests/responses)
+✅ Visual testing & screenshot comparisons
+✅ ExcelJS for data-driven tests, file upload/download automation
+✅ Page Object Model (POM) structure with reusable methods
+✅ Parameterization & fixtures for flexible test runs
+✅ Configurations: retries, parallel execution, mobile emulation, SSL settings
+✅ Reporting with HTML & Allure
+✅ CI/CD: Integration with Jenkins
 
 ## ⚙️ How to Run
 1. Clone the repo:
