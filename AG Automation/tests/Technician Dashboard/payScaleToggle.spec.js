@@ -1,5 +1,5 @@
 // TC-023.1: Pay Scale Toggle
-test.describe('TC-023: Pay Scale Toggle', () => {
+const { test, expect } = require('../../fixtures/technicianDashboard.fixtures');
   test('TC-023.1: Verify Admin can toggle between Technician hour avg. and total pay scale', async ({ page }) => {
     // Test Setup
     await page.goto('/login');
@@ -65,7 +65,6 @@ test.describe('TC-023: Pay Scale Toggle', () => {
     const returnedBasePay = await payScaleSection.locator('[data-testid="base-pay-value"]').textContent();
     expect(returnedBasePay).toBe(initialBasePay);
   });
-});
 
 //------------------- TEST NOTES -------------------
 // - Replace [data-testid="technician-pay-scale"] with actual pay scale section selector

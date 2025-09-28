@@ -1,5 +1,5 @@
 // TC-025.1, TC-025.2: Edit Technician Profile
-test.describe('TC-025: Edit Technician Profile', () => {
+const { test, expect } = require('../../fixtures/technicianDashboard.fixtures');
   test('TC-025.1, TC-025.2: Verify Admin can select to edit Technician Profile', async ({ page }) => {
     // Test Setup
     await page.goto('/login');
@@ -96,7 +96,6 @@ test.describe('TC-025: Edit Technician Profile', () => {
       await expect(nameField).toHaveValue('Updated Tech Name');
     }
   });
-});
 
 //------------------- TEST NOTES -------------------
 // - Replace [data-testid="edit-tech-button"] with actual Edit Tech button selector

@@ -1,5 +1,5 @@
 // TC-024.1: Hour Utilization Based on Time
-test.describe('TC-024: Hour Utilization Based on Time', () => {
+const { test, expect } = require('../../fixtures/technicianDashboard.fixtures');
   test('TC-024.1: Verify Admin can view Technician Hour Utilization based on selected Time', async ({ page }) => {
     // Test Setup
     await page.goto('/login');
@@ -62,7 +62,6 @@ test.describe('TC-024: Hour Utilization Based on Time', () => {
     await page.waitForTimeout(2000);
     await expect(hourUtilizationSection.locator('[data-testid="utilization-data"]')).toBeVisible();
   });
-});
 
 //------------------- TEST NOTES -------------------
 // - Replace [data-testid="technician-hour-utilization"] with actual hour utilization section selector

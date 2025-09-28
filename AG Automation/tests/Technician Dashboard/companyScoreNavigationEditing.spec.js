@@ -1,6 +1,6 @@
 // TC-020.1, TC-020.2: Company Score Navigation and Editing
 //companyScoreNavigationEditing.spec.js
-const { test, expect } = require('../../fixtures/dashboard.fixtures');
+const { test, expect } = require('../../fixtures/technicianDashboard.fixtures');
   test('TC-020.1, TC-020.2: Verify Admin can view Company score and edit Company Score', async ({ page }) => {
     // Test Setup
     await page.goto('/login');

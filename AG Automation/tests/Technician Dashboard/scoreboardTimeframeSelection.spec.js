@@ -1,5 +1,5 @@
 // TC-017.1, TC-017.2: Scoreboard Timeframe Selection
-test.describe('TC-017: Scoreboard Timeframe Selection', () => {
+const { test, expect } = require('../../fixtures/technicianDashboard.fixtures');
   test('TC-017.1, TC-017.2: Verify Admin can select Scoreboard timeframe', async ({ page }) => {
     // Test Setup - Navigate to Technician Dashboard
     await page.goto('/login');
@@ -52,7 +52,6 @@ test.describe('TC-017: Scoreboard Timeframe Selection', () => {
     // Verify scoreboard section is still visible and functioning
     await expect(page.locator('[data-testid="scoreboard-section"]')).toBeVisible();
   });
-});
 
 //------------------- TEST NOTES -------------------
 // - Replace [data-testid="time-dropdown"] with actual time dropdown selector

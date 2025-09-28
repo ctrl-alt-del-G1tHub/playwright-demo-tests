@@ -1,6 +1,6 @@
 // TC-018.1, TC-018.2, TC-018.3: View and Edit Technician Test Score
 //viewEditTechnicianTestScore.spec.js
-const { test, expect } = require('../../fixtures/dashboard.fixtures');
+const { test, expect } = require('../../fixtures/technicianDashboard.fixtures');
   test('TC-018.1, TC-018.2, TC-018.3: Verify Admin can view and edit Technician Test', async ({ page }) => {
     // Test Setup - Navigate to Technician Dashboard
     await page.goto('/login');

@@ -1,5 +1,5 @@
 // TC-016.1, TC-016.2: Technician Dashboard Access from Leaderboard
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require('../../fixtures/technicianDashboard.fixtures');
 
 test.describe('TC-016: Technician Dashboard Access from Leaderboard', () => {
   test('TC-016.1, TC-016.2: Verify Admin can access Technician Dashboard from leaderboard', async ({ page }) => {

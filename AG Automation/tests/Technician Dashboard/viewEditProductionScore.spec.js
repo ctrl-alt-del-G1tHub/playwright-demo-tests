@@ -1,6 +1,6 @@
 // TC-019.1, TC-019.2, TC-019.3: View and Edit Production Score
 //viewEditProductionScore.spec.js
-const { test, expect } = require('../../fixtures/dashboard.fixtures');
+const { test, expect } = require('../../fixtures/technicianDashboard.fixtures');
   test('TC-019.1, TC-019.2, TC-019.3: Verify Admin can view and edit Production Score', async ({ page }) => {
     // Test Setup
     await page.goto('/login');

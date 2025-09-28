@@ -1,6 +1,6 @@
 // TC-022.1: Field Score Navigation
 //fieldScoreNavigation.spec.js
-const { test, expect } = require('../../fixtures/dashboard.fixtures');
+const { test, expect } = require('../../fixtures/technicianDashboard.fixtures');
   test('TC-022.1: Verify Admin can view Field Score and edit via Edit Field Score screen', async ({ page }) => {
     // Test Setup
     await page.goto('/login');

@@ -1,5 +1,5 @@
 // TC-021.1, TC-021.2, TC-021.3: Tech Tally Editing
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require('../../fixtures/technicianDashboard.fixtures');
 
 test.describe('TC-021: Tech Tally Editing', () => {
   test('TC-021.1, TC-021.2, TC-021.3: Verify Admin can edit Tech Tally in Company Score', async ({ page }) => {
