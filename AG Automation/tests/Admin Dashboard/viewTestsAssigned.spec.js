@@ -1,5 +1,6 @@
 // TC-009.1, TC-009.2, TC-009.3: Cycle Test Statistics and Modal
-test.describe('TC-009: Cycle Test Statistics and Modal', () => {
+//viewTestsAssigned.spec.js
+const { test, expect } = require('../../fixtures/dashboard.fixtures');
   test('TC-009.1, TC-009.2, TC-009.3: Verify Admin can view cycle tests and modal', async ({ page }) => {
     // Test Setup
     await page.goto('/login');
@@ -55,7 +56,6 @@ test.describe('TC-009: Cycle Test Statistics and Modal', () => {
     await expect(techTestsModal).not.toBeVisible();
     await expect(page.locator('[data-testid="admin-dashboard"]')).toBeVisible();
   });
-});
 
 //------------------- TEST NOTES -------------------
 // - Replace [data-testid="cycle-test-container"] with actual Cycle Test container selector

@@ -1,5 +1,7 @@
+
 // TC-006.1: Cycle Notifications
-const { test, expect } = require('@playwright/test');
+//viewCycleNotifications.spec.js
+const { test, expect } = require('../../fixtures/dashboard.fixtures');
 
 test.describe('TC-006: Cycle Notifications', () => {
   test('TC-006.1: Verify Admin can view cycle notifications', async ({ page }) => {

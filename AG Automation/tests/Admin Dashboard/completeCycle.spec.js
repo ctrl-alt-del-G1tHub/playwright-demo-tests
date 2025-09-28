@@ -1,5 +1,6 @@
 // TC-014.1, TC-014.2, TC-014.3: Cycle Completion Process
-test.describe('TC-014: Cycle Completion Process', () => {
+//completeCycle.spec.js
+const { test, expect } = require('../../fixtures/dashboard.fixtures');
   test('TC-014.1, TC-014.2, TC-014.3: Verify Admin can complete Cycle', async ({ page }) => {
     // Test Setup - This test may require specific timing or mock data for end-of-cycle
     await page.goto('/login');
@@ -62,7 +63,6 @@ test.describe('TC-014: Cycle Completion Process', () => {
     await expect(page.locator('[data-testid="admin-dashboard"]')).toBeVisible();
     await expect(endOfCycleNotification).toBeVisible();
   });
-});
 
 //------------------- TEST NOTES -------------------
 // - Replace [data-testid="cycle-notifications-container"] with actual notifications container selector

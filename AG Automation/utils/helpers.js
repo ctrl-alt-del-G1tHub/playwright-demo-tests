@@ -1,6 +1,7 @@
-// tests/helpers/auth.js - Authentication helper for test setup
+// helpers classes only
 const { expect } = require('@playwright/test');
 
+// Authentication helper for test setup
 class AuthHelper {
   constructor(page) {
     this.page = page;
@@ -17,20 +18,13 @@ class AuthHelper {
   }
 
   async logout() {
-    // Implement logout logic based on your app
     await this.page.click('[data-testid="user-menu"]');
     await this.page.click('[data-testid="logout-button"]');
     await expect(this.page.locator('[data-testid="login-page"]')).toBeVisible();
   }
 }
 
-module.exports = { AuthHelper };
-
-// =============================================================================
-
-// tests/helpers/dashboard.js - Dashboard page object model
-const { expect } = require('@playwright/test');
-
+// Dashboard page object model
 class DashboardPage {
   constructor(page) {
     this.page = page;
@@ -64,13 +58,13 @@ class DashboardPage {
 
   async toggleDay() {
     await this.dayToggle.click();
-    await this.page.waitForTimeout(1000); // Allow data to refresh
+    await this.page.waitForTimeout(1000);
   }
 
   async selectCycle(cycleName) {
     await this.cycleDropdown.click();
     await this.page.locator('[data-testid="cycle-option"]').filter({ hasText: cycleName }).click();
-    await this.page.waitForTimeout(1000); // Allow data to refresh
+    await this.page.waitForTimeout(1000);
   }
 
   async getEventCounts() {
@@ -131,13 +125,7 @@ class DashboardPage {
   }
 }
 
-module.exports = { DashboardPage };
-
-// =============================================================================
-
-// tests/helpers/modals.js - Modal interaction helpers
-const { expect } = require('@playwright/test');
-
+// Modal interaction helpers
 class ModalHelper {
   constructor(page) {
     this.page = page;
@@ -179,11 +167,7 @@ class ModalHelper {
   }
 }
 
-module.exports = { ModalHelper };
-
-// =============================================================================
-
-// tests/setup/test-data.js - Test data management
+// Test data management
 class TestDataManager {
   constructor() {
     this.testUsers = {
@@ -246,11 +230,7 @@ class TestDataManager {
   }
 
   async setupCycleEndNotification(page) {
-    // Mock or trigger cycle end notification for testing
-    // This would typically involve API calls or test data setup
     await page.evaluate(() => {
-      // Example: Inject test notification into the DOM
-      // This depends on your application's notification system
       window.testNotifications = {
         cycleEnd: true,
         endOfCycle: false
@@ -259,251 +239,13 @@ class TestDataManager {
   }
 
   async cleanupTestData(page) {
-    // Clean up any test data created during tests
     await page.evaluate(() => {
-      // Reset test notifications
       if (window.testNotifications) {
         window.testNotifications = {};
       }
     });
   }
 }
-
-module.exports = { TestDataManager };
-
-// =============================================================================
-
-// tests/fixtures/dashboard-fixtures.js - Playwright fixtures for dashboard tests
-const { test as base } = require('@playwright/test');
-const { AuthHelper } = require('../helpers/auth');
-const { DashboardPage } = require('../helpers/dashboard');
-const { ModalHelper } = require('../helpers/modals');
-const { TestDataManager } = require('../setup/test-data');
-
-const test = base.extend({
-  authHelper: async ({ page }, use) => {
-    const authHelper = new AuthHelper(page);
-    await use(authHelper);
-  },
-
-  dashboardPage: async ({ page }, use) => {
-    const dashboardPage = new DashboardPage(page);
-    await use(dashboardPage);
-  },
-
-  modalHelper: async ({ page }, use) => {
-    const modalHelper = new ModalHelper(page);
-    await use(modalHelper);
-  },
-
-  testDataManager: async ({}, use) => {
-    const testDataManager = new TestDataManager();
-    await use(testDataManager);
-  },
-
-  authenticatedPage: async ({ page, authHelper }, use) => {
-    await authHelper.loginAsAdmin();
-    await use(page);
-    // Cleanup happens automatically when page is destroyed
-  }
-});
-
-module.exports = { test };
-
-// =============================================================================
-
-// package.json scripts addition - Add these to your package.json
-/*
-{
-  "scripts": {
-    "test:e2e": "playwright test",
-    "test:e2e:ui": "playwright test --ui",
-    "test:e2e:headed": "playwright test --headed",
-    "test:e2e:debug": "playwright test --debug",
-    "test:e2e:report": "playwright show-report",
-    "test:e2e:dashboard": "playwright test tests/dashboard --headed",
-    "test:e2e:smoke": "playwright test --grep @smoke",
-    "test:install": "playwright install"
-  }
-}
-*/
-
-// =============================================================================
-
-// tests/example-usage.spec.js - Example of using the fixtures and helpers
-const { test, expect } = require('./fixtures/dashboard-fixtures');
-
-test.describe('Dashboard Tests with Fixtures', () => {
-  test('Example: Complete dashboard workflow using fixtures', async ({ 
-    page, 
-    dashboardPage, 
-    modalHelper, 
-    authenticatedPage 
-  }) => {
-    // User is already authenticated via authenticatedPage fixture
-    await dashboardPage.goto();
-    await dashboardPage.waitForLoad();
-
-    // Test events container
-    const eventCounts = await dashboardPage.getEventCounts();
-    expect(eventCounts.scheduled).toBeGreaterThanOrEqual(0);
-
-    // Click events and handle modal
-    await dashboardPage.clickEventContainer();
-    await expect(page).toHaveURL(/.*schedule/);
-
-    // Navigate back to dashboard
-    await dashboardPage.goto();
-
-    // Test technician status modal
-    await dashboardPage.clickTechStatusContainer();
-    const modal = await modalHelper.waitForModal('[data-testid="technician-status-modal"]');
-    await modalHelper.closeModal('[data-testid="technician-status-modal"]');
-
-    // Test leaderboard
-    const technicians = await dashboardPage.getLeaderboardTechnicians();
-    expect(technicians.length).toBeGreaterThan(0);
-    expect(technicians.every(tech => tech.status.toLowerCase().includes('active'))).toBe(true);
-  });
-});
-
-// =============================================================================
-
-// Global test setup and teardown
-// tests/global-setup.js
-async function globalSetup() {
-  // Global setup that runs once before all tests
-  console.log('Setting up test environment...');
-  
-  // You might want to:
-  // - Start your application server
-  // - Set up test database
-  // - Create test users
-  // - Configure test environment variables
-  
-  process.env.NODE_ENV = 'test';
-  process.env.API_URL = 'http://localhost:3000/api';
-}
-
-module.exports = globalSetup;
-
-// tests/global-teardown.js
-async function globalTeardown() {
-  // Global cleanup that runs once after all tests
-  console.log('Cleaning up test environment...');
-  
-  // You might want to:
-  // - Stop application server
-  // - Clean up test database
-  // - Remove test files
-}
-
-module.exports = globalTeardown;
-
-// =============================================================================
-
-// Running your tests - Command examples:
-
-/* 
-# Run all dashboard tests
-npm run test:e2e
-
-# Run specific test file
-npx playwright test tests/tc001-005.spec.js
-
-# Run tests with UI mode for debugging
-npm run test:e2e:ui
-
-# Run tests in headed mode (visible browser)
-npx playwright test --headed
-
-# Run tests and generate report
-npx playwright test && npx playwright show-report
-
-# Run only smoke tests (if you tag them with @smoke)
-npx playwright test --grep @smoke
-
-# Run specific test case
-npx playwright test --grep "TC-001"
-
-# Run tests in specific browser
-npx playwright test --project chromium
-
-# Debug specific test
-npx playwright test tests/tc001-005.spec.js --debug
-
-# Run tests with different baseURL
-npx playwright test --config=playwright.config.js
-
-# Generate test code (record actions)
-npx playwright codegen localhost:3000
-*/
-
-//===============================================================================
-//                              IMPLEMENTATION NOTES
-//===============================================================================
-
-/*
-SELECTOR UPDATES NEEDED:
-When you implement these tests, you'll need to update ALL selectors marked with 
-[data-testid="..."] to match your actual application. Here's a systematic approach:
-
-1. INSPECT YOUR APPLICATION:
-   - Open your app in browser
-   - Use Dev Tools to inspect elements
-   - Note the actual selectors, IDs, classes, or text content
-
-2. REPLACE TEST SELECTORS:
-   Priority order for selector types:
-   a) data-testid attributes (most reliable)
-   b) role-based selectors: page.getByRole('button', { name: 'Login' })
-   c) text-based selectors: page.getByText('Admin Dashboard')
-   d) CSS selectors/classes (least reliable, avoid if possible)
-
-3. COMMON REPLACEMENTS NEEDED:
-   - [data-testid="admin-dashboard"] → your dashboard container
-   - [data-testid="username"] → your username input field
-   - [data-testid="events-container"] → your events widget
-   - [data-testid="technician-leaderboard"] → your leaderboard table
-   - etc.
-
-4. ADD DATA-TESTID ATTRIBUTES:
-   If your app doesn't have test IDs, add them:
-   <div data-testid="admin-dashboard">...</div>
-   <button data-testid="login-button">Login</button>
-   
-5. URL PATTERNS:
-   Update all URL expectations to match your routing:
-   - /login → your login path
-   - /admin/dashboard → your dashboard path
-   - /schedule → your schedule path
-
-6. TEST DATA:
-   - Update login credentials
-   - Ensure test users exist in your system
-   - Set up test technicians and cycles as needed
-
-7. TIMING ADJUSTMENTS:
-   - Replace waitForTimeout() with proper waitFor() methods
-   - Adjust timeouts based on your app's performance
-   - Use page.waitForLoadState('networkidle') for data loading
-
-8. BROWSER CONFIGURATION:
-   - Update baseURL in playwright.config.js
-   - Adjust webServer command for your app startup
-   - Configure proper viewport sizes for your responsive design
-
-TESTING STRATEGY:
-1. Start with login test to verify basic functionality
-2. Test each TC-001, TC-002, etc. individually
-3. Update selectors as you encounter failures
-4. Build up test data and fixtures gradually
-5. Add proper error handling and retry logic
-
-Remember: These tests are a starting point. You'll need to adapt them to your 
-specific application structure, timing, and business logic.*/
-
-const { expect } = require('@playwright/test');
 
 // Technician Dashboard Page Object Model
 class TechnicianDashboardPage {
@@ -550,7 +292,7 @@ class TechnicianDashboardPage {
     await expect(dropdownMenu).toBeVisible();
     await dropdownMenu.locator('[data-testid="time-option"]').filter({ hasText: timeframe }).click();
     await expect(this.timeDropdown).toContainText(timeframe);
-    await this.page.waitForTimeout(2000); // Allow data to refresh
+    await this.page.waitForTimeout(2000);
   }
 
   async getScoreCardValues() {
@@ -589,7 +331,6 @@ class TechnicianDashboardPage {
       await modal.locator('[data-testid="save-button"]').click();
       await expect(modal).not.toBeVisible();
       
-      // Wait for and verify toast
       const toast = this.page.locator('[data-testid="toast-confirmation"]');
       await expect(toast).toBeVisible();
       
@@ -607,17 +348,14 @@ class TechnicianDashboardPage {
     const modal = this.page.locator('[data-testid="edit-production-score-modal"]');
     await expect(modal).toBeVisible();
     
-    // Select technician (first option)
     const techDropdown = modal.locator('[data-testid="technician-dropdown"]');
     await techDropdown.click();
     await this.page.locator('[data-testid="technician-option"]').first().click();
     
-    // Enter points
     const pointsField = modal.locator('[data-testid="modify-points-field"]');
     await pointsField.clear();
     await pointsField.fill(points.toString());
     
-    // Enter note
     const noteField = modal.locator('[data-testid="note-field"]');
     await noteField.fill(note);
     
@@ -651,7 +389,7 @@ class TechnicianDashboardPage {
     const button = viewType === 'total' ? this.totalButton : this.hourAverageButton;
     await button.click();
     await expect(button).toHaveClass(/.*active.*|.*selected.*/);
-    await this.page.waitForTimeout(1000); // Allow data to update
+    await this.page.waitForTimeout(1000);
   }
 
   async getPayScaleValues() {
@@ -737,7 +475,6 @@ class EditCompanyScorePage {
       await modal.locator('[data-testid="save-button"]').click();
       await expect(modal).not.toBeVisible();
       
-      // Verify toast confirmation
       const toast = this.page.locator('[data-testid="toast-confirmation"]');
       await expect(toast).toBeVisible();
       return true;
@@ -757,7 +494,6 @@ class TechnicianProfilePage {
     this.form = page.locator('[data-testid="technician-profile-form"]');
     this.saveAllButton = page.locator('[data-testid="save-all-button"]');
     
-    // Common profile fields
     this.nameField = this.form.locator('[data-testid="technician-name-field"]');
     this.emailField = this.form.locator('[data-testid="technician-email-field"]');
     this.phoneField = this.form.locator('[data-testid="technician-phone-field"]');
@@ -791,7 +527,6 @@ class TechnicianProfilePage {
     
     await this.saveAllButton.click();
     
-    // Should return to technician dashboard
     await expect(this.page).toHaveURL(/.*technician.*dashboard/);
     await expect(this.page.locator('[data-testid="technician-dashboard"]')).toBeVisible();
     
@@ -831,23 +566,19 @@ class LeaderboardHelper {
   async openTechnicianDashboard(technicianName) {
     const techRows = this.leaderboard.locator('[data-testid^="technician-row-"]');
     
-    // Find the technician by name
     const techRow = techRows.filter({
       has: this.page.locator('[data-testid="technician-name"]').filter({ hasText: technicianName })
     });
     
     await expect(techRow).toBeVisible();
     
-    // Click to expand row
     await techRow.click();
     await expect(techRow).toHaveClass(/.*expanded.*|.*open.*/);
     
-    // Click Open Dashboard link
     const openDashboardLink = techRow.locator('[data-testid="open-dashboard-link"]');
     await expect(openDashboardLink).toBeVisible();
     await openDashboardLink.click();
     
-    // Should navigate to technician dashboard
     await expect(this.page).toHaveURL(/.*technician.*dashboard/);
     await expect(this.page.locator('[data-testid="technician-dashboard"]')).toBeVisible();
     
@@ -867,213 +598,12 @@ class LeaderboardHelper {
 
 // Export all classes
 module.exports = {
+  AuthHelper,
+  DashboardPage,
+  ModalHelper,
+  TestDataManager,
   TechnicianDashboardPage,
   EditCompanyScorePage,
   TechnicianProfilePage,
   LeaderboardHelper
 };
-
-//===============================================================================
-//                              USAGE EXAMPLES
-//===============================================================================
-
-/*
-// Example usage in your test files:
-
-const { test, expect } = require('@playwright/test');
-const { 
-  TechnicianDashboardPage, 
-  EditCompanyScorePage,
-  TechnicianProfilePage,
-  LeaderboardHelper,
-  AuthHelper 
-} = require('./helpers');
-
-test('Complete technician dashboard workflow', async ({ page }) => {
-  // Setup
-  const auth = new AuthHelper(page);
-  await auth.loginAsAdmin();
-
-  // Access technician dashboard from leaderboard
-  const leaderboard = new LeaderboardHelper(page);
-  await page.goto('/admin/dashboard');
-  const techName = await leaderboard.openTechnicianDashboard('John Smith');
-
-  // Use technician dashboard
-  const techDashboard = new TechnicianDashboardPage(page);
-  await techDashboard.waitForLoad();
-  
-  // Change timeframe and verify data updates
-  await techDashboard.selectTimeframe('Last Cycle');
-  
-  // Edit test score
-  await techDashboard.editTestScore(95, true);
-  
-  // Edit production score
-  await techDashboard.editProductionScore(10, 'Quality improvement', true);
-  
-  // Toggle pay scale view
-  await techDashboard.togglePayScale('total');
-  const payScale = await techDashboard.getPayScaleValues();
-  console.log('Pay scale totals:', payScale);
-  
-  // Check hour utilization
-  const utilization = await techDashboard.getHourUtilizationData();
-  console.log('Hour utilization:', utilization);
-  
-  // Navigate to company score editing
-  await techDashboard.navigateToCompanyScoreEdit();
-  
-  const companyScorePage = new EditCompanyScorePage(page);
-  await companyScorePage.waitForLoad();
-  
-  // Edit a tech tally
-  await companyScorePage.editTechTally(0, {
-    companyScore: 88,
-    policyMetric: 'Safety Compliance',
-    notes: 'Improved safety protocol adherence',
-    tallyDate: '2025-09-15'
-  });
-  
-  // Go back to dashboard
-  await companyScorePage.goBack();
-  
-  // Navigate to profile editing
-  await techDashboard.navigateToProfile();
-  
-  const profilePage = new TechnicianProfilePage(page);
-  await profilePage.waitForLoad();
-  
-  // Update profile
-  await profilePage.updateProfile({
-    name: 'John Smith Updated',
-    email: 'john.smith.updated@company.com',
-    phone: '555-0199'
-  });
-  
-  // Verify back on dashboard with updates
-  await expect(page.locator('[data-testid="technician-dashboard"]')).toBeVisible();
-});
-
-// Example test using fixtures:
-test('Technician score editing workflow', async ({ page }) => {
-  const auth = new AuthHelper(page);
-  const techDashboard = new TechnicianDashboardPage(page);
-  
-  await auth.loginAsAdmin();
-  await techDashboard.goto('tech-001');
-  
-  // Get initial scores
-  const initialScores = await techDashboard.getScoreCardValues();
-  console.log('Initial scores:', initialScores);
-  
-  // Edit test score and verify update
-  await techDashboard.editTestScore(92, true);
-  
-  const updatedScores = await techDashboard.getScoreCardValues();
-  expect(updatedScores.testScore).toContain('92');
-  
-  // Test cancel functionality
-  await techDashboard.editTestScore(85, false); // false = cancel
-  
-  // Score should remain 92
-  const cancelledScores = await techDashboard.getScoreCardValues();
-  expect(cancelledScores.testScore).toContain('92');
-});
-*/
-
-//===============================================================================
-//                              IMPLEMENTATION NOTES
-//===============================================================================
-
-/*
-INTEGRATION WITH YOUR EXISTING helpers.js:
-
-1. ADD these classes to your existing AG Automation/helpers.js file:
-   - Copy all the classes above (TechnicianDashboardPage, EditCompanyScorePage, etc.)
-   - Add them to your existing module.exports
-
-2. UPDATE your existing module.exports to include the new classes:
-   module.exports = {
-     // Your existing classes...
-     AuthHelper,
-     DashboardPage,
-     ModalHelper,
-     TestDataManager,
-     
-     // NEW Technician Dashboard classes
-     TechnicianDashboardPage,
-     EditCompanyScorePage,
-     TechnicianProfilePage,
-     LeaderboardHelper
-   };
-
-3. SELECTOR UPDATES NEEDED:
-   Replace ALL [data-testid="..."] selectors with your actual application selectors:
-   
-   PRIORITY SELECTORS TO UPDATE:
-   - [data-testid="technician-dashboard"] → your main dashboard container
-   - [data-testid="technician-dashboard-name"] → tech name display
-   - [data-testid="technician-dashboard-picture"] → tech picture/avatar
-   - [data-testid="test-score-card"] → test score widget/card
-   - [data-testid="production-score-card"] → production score widget/card
-   - [data-testid="company-score-card"] → company score widget/card
-   - [data-testid="field-score-card"] → field score widget/card
-   - [data-testid="edit-test-score-icon"] → edit icons (pen/pencil icons)
-   - [data-testid="time-dropdown"] → timeframe selection dropdown
-   - [data-testid="technician-pay-scale"] → pay scale section
-   - [data-testid="hour-average-button"] → pay scale toggle buttons
-   - [data-testid="total-button"] → pay scale toggle buttons
-   - [data-testid="edit-tech-button"] → Edit Tech button
-
-4. MODAL SELECTORS:
-   - [data-testid="edit-test-score-modal"] → test score edit modal
-   - [data-testid="edit-production-score-modal"] → production score edit modal  
-   - [data-testid="tech-tally-modal"] → tech tally edit modal
-   - [data-testid="cycle-test-score-total"] → score input fields
-   - [data-testid="modify-points-field"] → points input field
-   - [data-testid="note-field"] → notes input field
-
-5. NAVIGATION SELECTORS:
-   - Update URL patterns for your routing structure:
-     * /technician/dashboard/{id} → your technician dashboard route
-     * /edit/company/score → your company score edit route  
-     * /edit/field/score → your field score edit route
-     * /technician/profile → your profile edit route
-
-6. DROPDOWN HANDLING:
-   - Update dropdown interaction patterns based on your UI library
-   - Handle dropdown options with proper wait strategies
-   - Consider using semantic selectors like getByRole('option')
-
-7. FORM HANDLING:
-   - Adjust form field interactions based on your form library
-   - Handle validation messages and error states
-   - Add proper wait strategies for form submissions
-
-8. TEST DATA:
-   - Create test technicians with predictable IDs (tech-001, tech-002, etc.)
-   - Set up test cycles and scoring data
-   - Consider database seeding for consistent test data
-
-9. ERROR HANDLING:
-   - Add try-catch blocks for optional UI elements
-   - Handle cases where certain score cards might not be visible
-   - Add fallback selectors for different UI states
-
-10. PERFORMANCE:
-    - Replace waitForTimeout() with proper wait strategies
-    - Use page.waitForResponse() for API calls
-    - Implement proper loading state detection
-
-TESTING STRATEGY:
-1. Start with basic navigation tests (TC-016)
-2. Test timeframe selection functionality (TC-017)  
-3. Test score editing workflows (TC-018, TC-019)
-4. Test complex navigation flows (TC-020, TC-021)
-5. Test profile editing (TC-025)
-6. Integrate with your existing dashboard tests
-
-Remember: These helpers provide a clean abstraction layer but will need 
-selector updates to match your actual application structure!
-*/

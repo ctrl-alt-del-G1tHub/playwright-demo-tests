@@ -1,5 +1,6 @@
 // TC-011.1, TC-011.2: Leaderboard Display and Functionality
-const { test, expect } = require('@playwright/test');
+//technicianStatus.spec.js
+const { test, expect } = require('../../fixtures/dashboard.fixtures');
 
 test.describe('TC-011: Leaderboard Display and Functionality', () => {
   test('TC-011.1, TC-011.2: Verify Admin can view the technician leaderboard', async ({ page }) => {

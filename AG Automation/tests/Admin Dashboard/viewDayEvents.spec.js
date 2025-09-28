@@ -1,3 +1,5 @@
+//viewDayEvents.spec.js
+const { test, expect } = require('../../fixtures/dashboard.fixtures');
 // TC-005.1: Day Toggle Functionality
 test.describe('TC-005: Day Toggle Functionality', () => {
   test('TC-005.1: Verify Admin can select to view the days events', async ({ page }) => {

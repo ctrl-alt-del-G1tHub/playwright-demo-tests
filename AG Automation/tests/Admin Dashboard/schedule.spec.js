@@ -1,4 +1,5 @@
-import { test, expect } from '@playwright/test';
+//schedule.spec.js
+const { test, expect } = require('../../fixtures/dashboard.fixtures');
 
 test('Verify Technician Status container opens modal', async ({ page }) => {
   // --- Precondition ---

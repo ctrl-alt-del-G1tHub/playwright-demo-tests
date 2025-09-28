@@ -1,5 +1,6 @@
 // TC-007.1: Team Scores Display
-test.describe('TC-007: Team Scores Display', () => {
+//viewAverageScores.spec.js
+const { test, expect } = require('../../fixtures/dashboard.fixtures');
   test('TC-007.1: Verify Admin can view the average scores', async ({ page }) => {
     // Test Setup - Login
     await page.goto('/login');
@@ -38,7 +39,6 @@ test.describe('TC-007: Team Scores Display', () => {
       await expect(topTechSection.locator(`[data-testid="metric-${metric}"]`)).toBeVisible();
     }
   });
-});
 
 //------------------- TEST NOTES -------------------
 // - Replace [data-testid="team-average-scores"] with actual team scores section selector

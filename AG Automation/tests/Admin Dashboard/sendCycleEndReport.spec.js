@@ -1,5 +1,6 @@
 // TC-015.1, TC-015.2, TC-015.3: Cycle Report Sending
-test.describe('TC-015: Cycle Report Sending', () => {
+//sendCycleEndReport.spec.js
+const { test, expect } = require('../../fixtures/dashboard.fixtures');
   test('TC-015.1, TC-015.2, TC-015.3: Verify Admin can send cycle end report', async ({ page }) => {
     // Test Setup
     await page.goto('/login');
@@ -70,7 +71,7 @@ test.describe('TC-015: Cycle Report Sending', () => {
     // Crew Reviews, Tech Tallies, Shifts attendance status
     // This verification would typically be done through API testing or log checking
   });
-});
+  
 
 //------------------- TEST NOTES -------------------
 // - Replace [data-testid="end-of-cycle-report-notification"] with actual notification selector

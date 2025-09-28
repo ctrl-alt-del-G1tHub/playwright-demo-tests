@@ -1,5 +1,6 @@
 // TC-008.1: Company Pay Toggle
-test.describe('TC-008: Company Pay Toggle', () => {
+//viewCompanyPayout.spec.js
+const { test, expect } = require('../../fixtures/dashboard.fixtures');
   test('TC-008.1: Verify Admin can view the company pay out', async ({ page }) => {
     // Test Setup
     await page.goto('/login');
@@ -38,7 +39,7 @@ test.describe('TC-008: Company Pay Toggle', () => {
     const finalState = await companyPayToggle.isChecked();
     expect(finalState).toBe(initialState);
   });
-});
+;
 
 //------------------- TEST NOTES -------------------
 // - Replace [data-testid="company-pay-card"] with actual Company Pay card container selector

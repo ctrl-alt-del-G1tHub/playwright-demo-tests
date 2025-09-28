@@ -1,5 +1,6 @@
 // adminDashboard.spec.js
-import { test, expect } from '@playwright/test';
+const { test, expect } = require('../../fixtures/dashboard.fixtures');
+
 
 test.describe('Admin Dashboard', () => {
   

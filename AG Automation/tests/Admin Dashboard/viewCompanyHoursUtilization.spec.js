@@ -1,5 +1,6 @@
 // TC-010.1: Company Hours Utilization
-test.describe('TC-010: Company Hours Utilization', () => {
+//viewCompanyHoursUtilization.spec.js
+const { test, expect } = require('../../fixtures/dashboard.fixtures');
   test('TC-010.1: Verify Admin can view company hours utilization', async ({ page }) => {
     // Test Setup - Login
     await page.goto('/login');
@@ -43,7 +44,6 @@ test.describe('TC-010: Company Hours Utilization', () => {
     expect(percentage).toBeGreaterThanOrEqual(0);
     expect(percentage).toBeLessThanOrEqual(100);
   });
-});
 
 //------------------- TEST NOTES -------------------
 // - Replace [data-testid="company-hours-utilization-card"] with actual hours card selector

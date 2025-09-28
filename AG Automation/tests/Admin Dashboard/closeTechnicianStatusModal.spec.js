@@ -1,3 +1,5 @@
+//closeTechnicianStatusModel.spec.js
+const { test, expect } = require('../../fixtures/dashboard.fixtures');
 test('Verify closing the Technician Status modal', async ({ page }) => {
   // --- Precondition: Modal is already open ---
   await page.goto('https://your-app-url.com/admin/dashboard');

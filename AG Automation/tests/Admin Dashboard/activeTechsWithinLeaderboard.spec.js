@@ -1,5 +1,6 @@
 // TC-013.1: Active Technicians Only
-test.describe('TC-013: Active Technicians Only', () => {
+//activeTechsWithinLeaderboard.spec.js
+const { test, expect } = require('../../fixtures/dashboard.fixtures');
   test('TC-013.1: Verify only Active Techs are in the leaderboard', async ({ page }) => {
     // Test Setup - This test requires pre-setup of archived/deleted technician
     // Navigate to Company Profile to archive a technician first
@@ -59,7 +60,6 @@ test.describe('TC-013: Active Technicians Only', () => {
       expect(status.toLowerCase()).toContain('active');
     }
   });
-});
 
 //------------------- TEST NOTES -------------------
 // - Replace [data-testid="company-profile-page"] with actual company profile page selector

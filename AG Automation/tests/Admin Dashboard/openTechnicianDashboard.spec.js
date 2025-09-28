@@ -1,5 +1,6 @@
 // TC-012.1: Technician Dashboard Access
-test.describe('TC-012: Technician Dashboard Access', () => {
+//openTechnicianDashboard.spec.js
+const { test, expect } = require('../../fixtures/dashboard.fixtures');
   test('TC-012.1: Verify Admin can select a tech to open their technician dashboard', async ({ page }) => {
     // Test Setup
     await page.goto('/login');
@@ -47,7 +48,6 @@ test.describe('TC-012: Technician Dashboard Access', () => {
       await expect(page.locator('[data-testid="technician-name-header"]')).toContainText(technicianName);
     }
   });
-});
 
 //------------------- TEST NOTES -------------------
 // - Replace [data-testid="technician-name"] with actual technician name selector
