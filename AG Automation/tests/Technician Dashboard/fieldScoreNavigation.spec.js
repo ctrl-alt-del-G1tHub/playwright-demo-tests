@@ -1,5 +1,6 @@
 // TC-022.1: Field Score Navigation
-test.describe('TC-022: Field Score Navigation', () => {
+//fieldScoreNavigation.spec.js
+const { test, expect } = require('../../fixtures/dashboard.fixtures');
   test('TC-022.1: Verify Admin can view Field Score and edit via Edit Field Score screen', async ({ page }) => {
     // Test Setup
     await page.goto('/login');
@@ -40,7 +41,6 @@ test.describe('TC-022: Field Score Navigation', () => {
       await expect(deleteButton).toBeVisible();
     }
   });
-});
 
 //------------------- TEST NOTES -------------------
 // - Replace [data-testid="field-score-card"] with actual Field Score card selector

@@ -1,5 +1,6 @@
 // TC-019.1, TC-019.2, TC-019.3: View and Edit Production Score
-test.describe('TC-019: View and Edit Production Score', () => {
+//viewEditProductionScore.spec.js
+const { test, expect } = require('../../fixtures/dashboard.fixtures');
   test('TC-019.1, TC-019.2, TC-019.3: Verify Admin can view and edit Production Score', async ({ page }) => {
     // Test Setup
     await page.goto('/login');
@@ -72,7 +73,6 @@ test.describe('TC-019: View and Edit Production Score', () => {
     await expect(editProductionModal).not.toBeVisible();
     await expect(page.locator('[data-testid="technician-dashboard"]')).toBeVisible();
   });
-});
 
 //------------------- TEST NOTES -------------------
 // - Replace [data-testid="production-score-card"] with actual Production Score card selector

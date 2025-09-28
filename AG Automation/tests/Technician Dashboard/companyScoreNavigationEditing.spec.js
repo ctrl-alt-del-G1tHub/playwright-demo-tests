@@ -1,5 +1,6 @@
 // TC-020.1, TC-020.2: Company Score Navigation and Editing
-test.describe('TC-020: Company Score Navigation and Editing', () => {
+//companyScoreNavigationEditing.spec.js
+const { test, expect } = require('../../fixtures/dashboard.fixtures');
   test('TC-020.1, TC-020.2: Verify Admin can view Company score and edit Company Score', async ({ page }) => {
     // Test Setup
     await page.goto('/login');
@@ -40,7 +41,6 @@ test.describe('TC-020: Company Score Navigation and Editing', () => {
     await expect(page.locator('[data-testid="technician-dashboard"]')).toBeVisible();
     await expect(page.locator('[data-testid="company-score-card"]')).toBeVisible();
   });
-});
 
 //------------------- TEST NOTES -------------------
 // - Replace [data-testid="company-score-card"] with actual Company Score card selector

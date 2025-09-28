@@ -1,5 +1,6 @@
 // TC-018.1, TC-018.2, TC-018.3: View and Edit Technician Test Score
-test.describe('TC-018: View and Edit Technician Test Score', () => {
+//viewEditTechnicianTestScore.spec.js
+const { test, expect } = require('../../fixtures/dashboard.fixtures');
   test('TC-018.1, TC-018.2, TC-018.3: Verify Admin can view and edit Technician Test', async ({ page }) => {
     // Test Setup - Navigate to Technician Dashboard
     await page.goto('/login');
@@ -68,8 +69,7 @@ test.describe('TC-018: View and Edit Technician Test Score', () => {
     await expect(editTestScoreModal).not.toBeVisible();
     await expect(page.locator('[data-testid="technician-dashboard"]')).toBeVisible();
   });
-});
-
+  
 //------------------- TEST NOTES -------------------
 // - Replace [data-testid="test-score-card"] with actual Test Score card selector
 // - Replace [data-testid="edit-test-score-icon"] with actual edit icon selector (may be a pen/pencil icon)
