@@ -1,51 +1,64 @@
 // TC-007.1: Team Scores Display
-//viewAverageScores.spec.js
-const { test, expect } = require('../../fixtures/dashboard.fixtures');
-  test('TC-007.1: Verify Admin can view the average scores', async ({ page }) => {
-    // Test Setup - Login
-    await page.goto('/login');
-    await page.fill('[data-testid="username"]', 'admin@company.com');
-    await page.fill('[data-testid="password"]', 'admin_password');
-    await page.click('[data-testid="login-button"]');
-    
-    // TC-007.1: Log in or select Dashboard
-    await page.goto('/admin/dashboard');
-    
-    // Expected Result: Admin Dashboard screen will open and display This Cycle's Team Average Scores 
-    // and the Top Technician Scores with gold star for #1 Top Technician
-    await expect(page.locator('[data-testid="admin-dashboard"]')).toBeVisible();
-    
-    // Verify Team Average Scores section
-    const teamScoresSection = page.locator('[data-testid="team-average-scores"]');
-    await expect(teamScoresSection).toBeVisible();
-    await expect(teamScoresSection.locator('[data-testid="section-title"]')).toContainText('This Cycle\'s Team Average Scores');
-    
-    // Verify Top Technician Scores section
-    const topTechSection = page.locator('[data-testid="top-technician-scores"]');
-    await expect(topTechSection).toBeVisible();
-    
-    // Verify gold star for #1 Top Technician
-    const goldStar = topTechSection.locator('[data-testid="gold-star"]');
-    await expect(goldStar).toBeVisible();
-    
-    // Verify top technician is highlighted/marked
-    const topTechnician = topTechSection.locator('[data-testid="top-technician"]');
-    await expect(topTechnician).toBeVisible();
-    await expect(topTechnician).toHaveClass(/.*top.*|.*gold.*|.*highlighted.*/);
-    
-    // Verify score metrics are displayed
-    const scoreMetrics = ['CS', 'FS', 'TS', 'PS', 'AS'];
-    for (const metric of scoreMetrics) {
-      await expect(topTechSection.locator(`[data-testid="metric-${metric}"]`)).toBeVisible();
-    }
-  });
+// viewAverageScores.spec.js
+const { test, expect } = require('@playwright/test');
 
-//------------------- TEST NOTES -------------------
-// - Replace [data-testid="team-average-scores"] with actual team scores section selector
-// - Replace [data-testid="top-technician-scores"] with actual top technician section selector
-// - Replace [data-testid="gold-star"] with actual gold star icon selector
-// - Replace [data-testid="top-technician"] with actual top technician container selector
-// - Replace metric selectors [data-testid="metric-CS"] etc. with actual metric display selectors
-// - Consider using page.getByText() for section titles
-// - Adjust class matching regex based on your actual CSS classes for highlighting
-// - May need to handle cases where no score data exists
+test('TC-007.1: Verify Admin can view the average scores', async ({ page }) => {
+  // Login
+  await page.goto('https://app.artisangenius.com/');
+  await page.fill('#email', 'jason@artisangenius.com');
+  await page.fill('#password', '13243546');
+  await page.click('button[type="submit"]');
+  await page.waitForURL('**/dashboard');
+  
+  // Wait for dashboard to load
+  await page.waitForTimeout(2000);
+  
+  // Verify "This Cycle's Team Average Scores" section is visible
+  const teamScoresSection = page.getByText("This Cycle's Team Average Scores");
+  await expect(teamScoresSection).toBeVisible();
+  
+  // Verify all score types are displayed in Team Average Scores
+  await expect(page.getByText('Production Score').first()).toBeVisible();
+  await expect(page.getByText('Company Score').first()).toBeVisible();
+  await expect(page.getByText('Field Score').first()).toBeVisible();
+  await expect(page.getByText('Test Score').first()).toBeVisible();
+  await expect(page.getByText('Artisan Score').first()).toBeVisible();
+  
+  // Verify "Top Technician Scores" section is visible
+  const topTechSection = page.getByText('Top Technician Scores');
+  await expect(topTechSection).toBeVisible();
+  
+  // Verify technician entries are displayed (Cooper Emery in the screenshot)
+  await expect(page.getByText('Cooper Emery').first()).toBeVisible();
+  await expect(page.getByText('Field Tech').first()).toBeVisible();
+  
+  // Verify score values are displayed in Top Technician section
+  const topTechContainer = page.locator('text=Top Technician Scores').locator('..');
+  await expect(topTechContainer.getByText('Production Score')).toBeVisible();
+  await expect(topTechContainer.getByText('Company Score')).toBeVisible();
+  await expect(topTechContainer.getByText('Field Score')).toBeVisible();
+  await expect(topTechContainer.getByText('Test Score')).toBeVisible();
+  await expect(topTechContainer.getByText('Artisan Score')).toBeVisible();
+  
+  // Verify score numbers are displayed (checking for numeric values)
+  await expect(topTechContainer.locator('text=/^\\d+$/')).toHaveCount(5, { timeout: 5000 });
+});
+// Additional verification for gold star/ranking indicator
+test('TC-007.2: Verify top technician has ranking indicator', async ({ page }) => {
+  await page.goto('https://app.artisangenius.com/');
+  await page.fill('#email', 'jason@artisangenius.com');
+  await page.fill('#password', '13243546');
+  await page.click('button[type="submit"]');
+  await page.waitForURL('**/dashboard');
+  
+  await page.waitForTimeout(2000);
+  
+  // Look for trophy/star icon (you'll need to inspect to find the actual selector)
+  // Option 1: SVG icon
+  const rankingIcon = page.locator('svg[class*="trophy"], svg[class*="star"], svg[class*="medal"]').first();
+  await expect(rankingIcon).toBeVisible();
+  
+  // Option 2: Or look for numbered ranking badges (🏆 0, 🏆 33, etc. from screenshot)
+  const rankingBadges = page.locator('text=/🏆/');
+  await expect(rankingBadges.first()).toBeVisible();
+});

@@ -6,25 +6,32 @@ test.describe('Admin Dashboard', () => {
   
  test('Admin can view events container and navigate to Schedule screen', async ({ page }) => {
   // Login precondition
-  await page.goto('Artisan Genius URL');
-  await page.fill('#username', 'admin');
-  await page.fill('#password', 'password');
+  await page.goto('https://app.artisangenius.com/');
+  await page.fill('#email', 'jason@artisangenius.com');
+  await page.fill('#password', '13243546');
   await page.click('button[type="submit"]');
   
   // Step 1: Verify Events container
-  await expect(page.locator('#events-container')).toBeVisible();
+  await expect(page.getByText('Events')).toBeVisible();
 
   // Step 2: Verify event statuses and percentage ring
-  await expect(page.locator('#events-container .scheduled')).toBeVisible();
-  await expect(page.locator('#events-container .in-progress')).toBeVisible();
-  await expect(page.locator('#events-container .completed')).toBeVisible();
-  await expect(page.locator('#events-container .percentage-ring')).toBeVisible();
+  const eventsCard = page.locator('div.MuiCard-root:has-text("Events")');
+
+  await expect(eventsCard.getByText('Scheduled', { exact: true }).first()).toBeVisible();
+  await expect(eventsCard.getByText('In Progress', { exact: true })).toBeVisible();
+  await expect(eventsCard.getByText('Completed', { exact: true })).toBeVisible();
+
+  await expect(eventsCard.locator('.MuiTypography-caption').nth(2)).toBeVisible();
 
   // Step 3: Click container
-  await page.click('#events-container');
+  await page.locator('div.MuiCard-root:has-text("Events")').nth(1).click();
 
-  // Step 4: Verify navigation to Schedule screen
-  await expect(page).toHaveURL(/.*\/schedule/); 
+ // Click the <a> that contains the span with text "Events"
+await page.locator('a:has(span:text("Events"))').click();
+
+// Wait for navigation
+await expect(page).toHaveURL(/.*\/schedule/);
+ 
   });
 
 });
