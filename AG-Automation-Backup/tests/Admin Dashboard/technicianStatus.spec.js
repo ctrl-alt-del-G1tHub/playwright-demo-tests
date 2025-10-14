@@ -1,13 +1,12 @@
 //technicianStatus.spec.js
 const { test, expect } = require('../../fixtures/dashboard.fixtures');
-
 // TC-003.1, TC-003.2: Technician Status Modal Content
 test.describe('TC-003: Technician Status Modal Content', () => {
   test('TC-003.1, TC-003.2: Verify Technician Status modal displays correctly', async ({ page }) => {
     // Test Setup - Open the modal first
     await page.goto('/login');
-    await page.fill('[data-testid="email"]', 'jason@artisangenius.com');
-    await page.fill('[data-testid="password"]', '13243546');
+    await page.fill('[data-testid="username"]', 'admin@company.com');
+    await page.fill('[data-testid="password"]', 'admin_password');
     await page.click('[data-testid="login-button"]');
     await page.goto('/admin/dashboard');
     
